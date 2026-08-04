@@ -2,6 +2,7 @@ node_modules
 .next
 out
 coverage
+.npm-cache
 .env*
 .DS_Store
 npm-debug.log*
