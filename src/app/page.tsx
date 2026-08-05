@@ -1,5 +1,5 @@
 import AccreditationsFinal from '@/components/AccreditationsFinal';
-// import ServicesPanel from '@/components/ServicesPanel';
+import ServicesPanel from '@/components/ServicesPanel';
 
 // Image in /public/images/Biosynlogo.jpeg
 const LOGO = '/images/Biosynlogo.jpeg';
@@ -96,37 +96,20 @@ export default function Home() {
       </section>
 
       {/* SERVICES */}
-        <section className="section section--surface" id="products">
-          <div className="section-container">
-            <div className="services-intro">
-              <div>
-                <span className="section-label">Products we test</span>
-                <h2 className="section-heading" style={{ marginBottom: 0 }}>
-                  Example product types we regularly analyse
-                </h2>
-              </div>
-              <a className="button button-secondary" href="#contact">Request a test →</a>
+      <section className="section section--surface" id="services">
+        <div className="section-container">
+          <div className="services-intro">
+            <div>
+              <span className="section-label">Our services</span>
+              <h2 className="section-heading" style={{ marginBottom: 0 }}>
+                Testing programs built around<br />real production needs.
+              </h2>
             </div>
-
-            <div className="products-grid" style={{ marginTop: 20 }}>
-              <ul className="products-list">
-                <li>Packaged foods (snacks, ready meals, sauces)</li>
-                <li>Dairy & dairy-derived products (milk, cheese, ghee)</li>
-                <li>Beverages (juices, soft drinks, bottled water)</li>
-                <li>Spices, herbs & dry ingredients (ground spices, blends)</li>
-                <li>Oils & fats (edible oils, ghee, margarine)</li>
-                <li>Meat & seafood products (fresh, frozen, processed)</li>
-                <li>Nutritional supplements & powders</li>
-                <li>Infant & baby foods</li>
-                <li>Bakery & confectionery</li>
-                <li>Personal care (soap, lotions) & cosmetic samples for contaminants</li>
-                <li>Agricultural samples (fertilisers, soil, grains)</li>
-                <li>Industrial waters & effluents</li>
-              </ul>
-            </div>
-
+            <a className="button button-secondary" href="#contact">Request a test →</a>
           </div>
-        </section>
+          <ServicesPanel />
+        </div>
+      </section>
 
       {/* HOW IT WORKS */}
       <section className="section section--white">

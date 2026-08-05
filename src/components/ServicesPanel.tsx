@@ -71,7 +71,6 @@ const SERVICE_DATA = [
     id: "environment",
     icon: "🌿",
     iconSrc: "/images/icons/environment.svg",
-    // no public image provided; SVG will be used
     title: "Environment Management Services",
     short: "Environmental monitoring, air quality, effluent testing, and regulatory compliance for industrial facilities.",
     color: "#0D6B5E",
@@ -176,7 +175,6 @@ const SERVICE_DATA = [
     id: "nabl",
     icon: "🏅",
     iconSrc: "/images/icons/nabl.svg",
-    // no public image provided; use SVG/icon fallback
     title: "NABL, FSMS 22000, HRA, ZED, SAMAR",
     short: "Accreditation consulting and assessor services for NABL, ISO 22000, and government quality schemes.",
     color: "#2ECBAD",
@@ -257,48 +255,28 @@ export default function ServicesPanel() {
             <button className="sp-detail-close" onClick={() => setActiveId(null)} aria-label="Close">✕</button>
           </div>
 
+          {/* Description */}
           <p className="sp-detail-body">{active.detail}</p>
 
-          <div className="sp-detail-cols">
-
-            {/* Test table */}
-            <div className="sp-tests-wrap">
-              <h4 className="sp-sub-heading">Tests &amp; Parameters</h4>
-              <div className="sp-tests-table">
-                <div className="sp-tests-thead">
-                  <span>Parameter</span>
-                  <span>Method</span>
-                  <span>TAT</span>
-                </div>
-                {active.tests.map((t, i) => (
-                  <div key={i} className="sp-tests-row">
-                    <span className="sp-test-name">{t.name}</span>
-                    <span className="sp-test-method">{t.method}</span>
-                    <span className="sp-test-time">{t.time}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Sample types + CTA */}
-            <div className="sp-side">
-              <div className="sp-samples-box">
-                <h4 className="sp-sub-heading">Accepted samples</h4>
-                <ul className="sp-samples-list">
-                  {active.sampleTypes.map((s, i) => (
-                    <li key={i} className="sp-sample-item">
-                      <span className="sp-sample-dot" />
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <a className="sp-enquire-btn button button-primary" href="#contact">
-                Request this test →
-              </a>
-            </div>
-
+          {/* Products / sample types */}
+          <div className="sp-products-section">
+            <h4 className="sp-sub-heading">Products we test in this category</h4>
+            <ul className="sp-products-list">
+              {active.sampleTypes.map((product, idx) => (
+                <li key={idx} className="sp-product-item">
+                  <span className="sp-product-badge">{product}</span>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          {/* CTA */}
+          <div className="sp-detail-footer">
+            <a className="sp-enquire-btn button button-primary" href="#contact">
+              Request this test →
+            </a>
+          </div>
+
         </div>
       )}
 
@@ -348,11 +326,10 @@ export default function ServicesPanel() {
           line-height: 1;
         }
         .sp-card-icon-img {
-          width: 72px;
-          height: 72px;
+          width: 325px;
+          height: 325px;
           display: block;
           object-fit: contain;
-        }
         }
         .sp-card-title {
           font-family: var(--font-heading);
@@ -439,16 +416,10 @@ export default function ServicesPanel() {
           margin: 0;
         }
 
-        .sp-detail-cols {
-          display: grid;
-          grid-template-columns: 1fr 280px;
-          gap: 0;
-        }
-
-        /* ── Tests table ── */
-        .sp-tests-wrap {
+        /* ── Products section ── */
+        .sp-products-section {
           padding: 1.75rem 2.25rem;
-          border-right: 1px solid var(--teal-line);
+          border-bottom: 1px solid var(--teal-line);
         }
         .sp-sub-heading {
           font-family: var(--font-heading);
@@ -459,95 +430,66 @@ export default function ServicesPanel() {
           color: var(--teal-dark);
           margin: 0 0 1rem;
         }
-        .sp-tests-table { display: flex; flex-direction: column; gap: 0; }
-        .sp-tests-thead {
-          display: grid;
-          grid-template-columns: 1fr 140px 80px;
-          gap: 0 1rem;
-          padding: 8px 12px;
+        .sp-products-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+        .sp-product-item {
+          display: inline-block;
+        }
+        .sp-product-badge {
+          display: inline-block;
+          padding: 0.4rem 1.2rem;
           background: var(--surface);
-          border-radius: 8px 8px 0 0;
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: var(--subtle);
+          border: 1px solid var(--teal-line);
+          border-radius: 40px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--ink-soft);
+          transition: background 0.15s, border-color 0.15s;
         }
-        .sp-tests-row {
-          display: grid;
-          grid-template-columns: 1fr 140px 80px;
-          gap: 0 1rem;
-          padding: 10px 12px;
-          border-bottom: 1px solid var(--teal-line);
-          align-items: center;
-          transition: background 0.15s;
-        }
-        .sp-tests-row:hover { background: var(--off-white); }
-        .sp-tests-row:last-child { border-bottom: none; }
-        .sp-test-name {
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: var(--ink);
-        }
-        .sp-test-method {
-          font-size: 0.78rem;
-          color: var(--muted);
-          font-family: var(--font-ui);
-        }
-        .sp-test-time {
-          font-size: 0.78rem;
-          color: var(--teal-mid);
-          font-weight: 600;
+        .sp-product-badge:hover {
+          background: var(--off-white);
+          border-color: var(--teal-mid);
         }
 
-        /* ── Side column ── */
-        .sp-side {
-          padding: 1.75rem 1.75rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
+        /* ── Footer ── */
+        .sp-detail-footer {
+          padding: 1.5rem 2.25rem;
           background: var(--surface);
         }
-        .sp-samples-box { flex: 1; }
-        .sp-samples-list { display: flex; flex-direction: column; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
-        .sp-sample-item {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          font-size: 0.875rem;
-          color: var(--ink-soft);
-          font-weight: 500;
-        }
-        .sp-sample-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: var(--teal-bright);
-          flex-shrink: 0;
-        }
         .sp-enquire-btn {
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          text-align: center;
+          padding: 0.75rem 2rem;
+          background: var(--teal-dark);
+          color: #fff;
+          border-radius: 40px;
+          font-weight: 700;
+          font-size: 0.9rem;
           text-decoration: none;
+          transition: background 0.2s;
+        }
+        .sp-enquire-btn:hover {
+          background: var(--teal-bright);
+          color: #fff;
         }
 
         /* ── Responsive ── */
         @media (max-width: 960px) {
           .sp-grid { grid-template-columns: 1fr 1fr; }
-          .sp-detail-cols { grid-template-columns: 1fr; }
-          .sp-tests-wrap { border-right: none; border-bottom: 1px solid var(--teal-line); }
-          .sp-side { background: var(--white); }
         }
         @media (max-width: 640px) {
           .sp-grid { grid-template-columns: 1fr; }
           .sp-detail-header { padding: 1.5rem; }
           .sp-detail-body { padding: 1.25rem 1.5rem; }
-          .sp-tests-wrap { padding: 1.25rem 1.5rem; }
-          .sp-tests-thead,
-          .sp-tests-row { grid-template-columns: 1fr 90px; }
-          .sp-test-method { display: none; }
-          .sp-side { padding: 1.25rem 1.5rem; }
+          .sp-products-section { padding: 1.25rem 1.5rem; }
+          .sp-detail-footer { padding: 1.25rem 1.5rem; }
         }
       `}</style>
     </div>
