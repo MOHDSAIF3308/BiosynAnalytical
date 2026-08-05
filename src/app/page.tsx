@@ -52,7 +52,7 @@ export default function Home() {
         <div className="hero-figure">
           <video
             className="hero-video"
-            src="/videos/lab1 (1).mp4"
+            src="/videos/lab.mp4"
             autoPlay
             muted
             loop
