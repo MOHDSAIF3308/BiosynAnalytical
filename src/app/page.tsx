@@ -10,6 +10,7 @@ import walter from '../../images/walter-otto-PT70CT6mATQ-unsplash.jpg';
 import img1 from '../../images/img1.jpg';
 import AccreditationsMarquee from '@/components/AccreditationsMarquee';
 import AccreditationsFinal from '@/components/AccreditationsFinal';
+import LogoMarquee from '@/components/LogoMarquee';
 
 const services = [
   'Microbiological testing for food safety monitoring',
@@ -92,6 +93,9 @@ export default function Home() {
           <Image src={img1} alt="Hero visual" className="hero-figure-img" />
         </div>
       </section>
+
+      {/* Logo marquee inserted directly after header/hero for persistent looping display */}
+      <LogoMarquee />
 
       {/* temporary marquee removed from this location; final section will appear at the end of the page */}
 
