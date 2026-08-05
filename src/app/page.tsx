@@ -1,159 +1,193 @@
-import Image from 'next/image';
-import ContactForm from '@/components/ContactForm';
-import ServicesPanel from '@/components/ServicesPanel';
-import logo from '../../images/Biosynlogo.jpeg';
-import diana from '../../images/diana-polekhina-ONuLIzB0UtA-unsplash.jpg';
-import drew from '../../images/drew-tGYrlchfObE-unsplash.jpg';
-import markus from '../../images/markus-winkler-3LQKDH-r-jI-unsplash.jpg';
-import provincial from '../../images/provincial-archives-of-alberta-1d3K5v5Y3lo-unsplash.jpg';
-import walter from '../../images/walter-otto-PT70CT6mATQ-unsplash.jpg';
-import img1 from '../../images/img1.jpg';
-import AccreditationsMarquee from '@/components/AccreditationsMarquee';
 import AccreditationsFinal from '@/components/AccreditationsFinal';
-import LogoMarquee from '@/components/LogoMarquee';
+// import ServicesPanel from '@/components/ServicesPanel';
 
-const services = [
-  'Microbiological testing for food safety monitoring',
-  'Nutritional and composition analysis for labels',
-  'Shelf-life, stability, and packaging support studies',
-  'Water, swab, and environmental hygiene testing',
-  'Contaminant screening and QA documentation support',
-  'Custom sampling plans for plants, kitchens, and distributors'
-];
+// Image in /public/images/Biosynlogo.jpeg
+const LOGO = '/images/Biosynlogo.jpeg';
 
 const workflow = [
-  'Receive sample and scope the required test panel',
-  'Run analytical and microbiological checks with traceability',
-  'Review results, interpret findings, and deliver clear reporting'
+  { num: '01', title: 'Sample Intake',   desc: 'Submit your sample with our intake form. We log chain-of-custody from the moment it arrives.' },
+  { num: '02', title: 'Analysis',        desc: 'Analytical and microbiological testing is run with full instrument traceability and internal QC checks.' },
+  { num: '03', title: 'Clear Reporting', desc: 'Results delivered as structured reports your quality team, auditors, or export clients can act on directly.' }
 ];
 
 const sectors = [
-  'Food manufacturers',
-  'Hotels and cloud kitchens',
-  'Dairy and beverage brands',
-  'Spice and grain processors',
-  'Packaged food exporters',
-  'Quality teams and consultants'
+  'Food manufacturers', 'Hotels & cloud kitchens', 'Dairy & beverage brands',
+  'Spice & grain processors', 'Packaged food exporters', 'Quality teams & consultants'
 ];
 
 const stats = [
-  { value: '24-72h', label: 'Typical reporting windows' },
-  { value: '100%', label: 'Traceable sample workflow' },
-  { value: 'Indore', label: 'Local support for central India' }
+  { value: '24–72h', label: 'Typical turnaround' },
+  { value: '100%',   label: 'Traceable workflow' },
+  { value: 'Indore', label: 'Central India' }
 ];
 
-// Excerpts and card generation handled in ServicesPanel; keep page minimal.
-
 export default function Home() {
-  const galleryImages = [drew, markus, diana, provincial, walter, img1];
   return (
     <main>
-      <section className="hero-full">
-        <div className="hero-figure">
-          <video
-            className="hero-video"
-            src="/videos/lab.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
 
-          <div className="hero-copy overlay">
-            <div className="brand-lockup">
-              <Image
-                src={logo}
-                alt="Biosyn Analytical logo"
-                className="brand-logo"
-                priority
-              />
-              <div>
-                <span className="brand-name">Biosyn Analytical</span>
-                <p className="brand-tag">Testing solutions for pharma industries</p>
+      {/* HERO */}
+      <div className="hero-figure">
+        <video className="hero-video" src="/videos/lab.mp4" autoPlay muted loop playsInline />
+        <div className="hero-overlay" />
+        <div className="hero-wave" />
+
+        <div className="hero-copy">
+          <div className="hero-logo-block">
+            {/* Plain <img> — 100% reliable on Cloudflare static export */}
+            <img
+              src={LOGO}
+              alt="Biosyn Analytical"
+              className="hero-logo-img"
+              width={110}
+              height={110}
+              loading="eager"
+            />
+            <span className="hero-logo-name">Biosyn Analytical</span>
+            <span className="hero-logo-tag">Accredited Testing Laboratory</span>
+          </div>
+
+          <p className="hero-eyebrow">Food · Pharma · Environment · Water</p>
+
+          <h1 className="hero-heading">
+            Precision testing.<br /><em>Results you can trust.</em>
+          </h1>
+
+          <p className="hero-lead">
+            Microbiological analysis, nutritional profiling, contaminant screening, and hygiene
+            verification — delivered with full traceability for manufacturers and quality teams
+            across central India.
+          </p>
+
+          <div className="hero-actions">
+            <a className="button button-primary" href="#contact">Request a quote</a>
+            <a className="button button-ghost"   href="#services">Our services</a>
+          </div>
+
+          <dl className="hero-stats">
+            {stats.map(s => (
+              <div key={s.label} className="hero-stat">
+                <dt className="hero-stat-value">{s.value}</dt>
+                <dd className="hero-stat-label">{s.label}</dd>
               </div>
-            </div>
-            <span className="eyebrow">Testing solutions for pharma industries</span>
-            <h1>Trusted testing, presented with clarity and confidence.</h1>
-            <p className="lead">
-              Built for modern pharma and regulated-industry teams, our site
-              presents Biosyn Analytical as a professional testing partner for
-              microbiology, quality assurance, hygiene, and product verification work.
-            </p>
-            <div className="hero-actions">
-              <a className="button button-primary" href="#contact">
-                Request a quote
-              </a>
-              <a className="button button-secondary" href="#services">
-                Explore services
-              </a>
-            </div>
+            ))}
+          </dl>
+        </div>
+      </div>
 
-            <dl className="stats-row">
-              {stats.map((stat) => (
-                <div key={stat.label}>
-                  <dt>{stat.value}</dt>
-                  <dd>{stat.label}</dd>
-                </div>
+      {/* WHO WE SUPPORT */}
+      <section className="section section--white">
+        <div className="section-container">
+          <div className="sectors-layout">
+            <div>
+              <span className="section-label">Who we support</span>
+              <h2 className="section-heading">Serving every link in<br />the food supply chain.</h2>
+              <p className="section-body">
+                From production floor to export documentation, Biosyn Analytical partners with
+                teams that need dependable, accredited results — without delays or guesswork.
+              </p>
+            </div>
+            <ul className="sectors-grid">
+              {sectors.map(s => (
+                <li key={s} className="sector-card"><span className="sector-card-dot" />{s}</li>
               ))}
-            </dl>
+            </ul>
           </div>
         </div>
       </section>
 
-      <div className="page-shell">
+      {/* SERVICES */}
+        <section className="section section--surface" id="products">
+          <div className="section-container">
+            <div className="services-intro">
+              <div>
+                <span className="section-label">Products we test</span>
+                <h2 className="section-heading" style={{ marginBottom: 0 }}>
+                  Example product types we regularly analyse
+                </h2>
+              </div>
+              <a className="button button-secondary" href="#contact">Request a test →</a>
+            </div>
 
-      {/* Logo marquee moved near accreditations to avoid changing accreditation layout */}
-        <p className="section-kicker">Who we support</p>
-        <p className="section-copy">
-          Food manufacturers, beverage brands, kitchens, processors, and
-          quality teams across central India.
-        </p>
-        <p className="inline-list">
-          {sectors.join(' · ')}
-        </p>
+            <div className="products-grid" style={{ marginTop: 20 }}>
+              <ul className="products-list">
+                <li>Packaged foods (snacks, ready meals, sauces)</li>
+                <li>Dairy & dairy-derived products (milk, cheese, ghee)</li>
+                <li>Beverages (juices, soft drinks, bottled water)</li>
+                <li>Spices, herbs & dry ingredients (ground spices, blends)</li>
+                <li>Oils & fats (edible oils, ghee, margarine)</li>
+                <li>Meat & seafood products (fresh, frozen, processed)</li>
+                <li>Nutritional supplements & powders</li>
+                <li>Infant & baby foods</li>
+                <li>Bakery & confectionery</li>
+                <li>Personal care (soap, lotions) & cosmetic samples for contaminants</li>
+                <li>Agricultural samples (fertilisers, soil, grains)</li>
+                <li>Industrial waters & effluents</li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+      {/* HOW IT WORKS */}
+      <section className="section section--white">
+        <div className="section-container">
+          <span className="section-label">How it works</span>
+          <h2 className="section-heading">Simple intake. Dependable<br />analysis. Readable outcomes.</h2>
+          <div className="workflow-grid">
+            {workflow.map(step => (
+              <div key={step.num} className="workflow-step">
+                <div className="workflow-num">{step.num}</div>
+                <h3 className="workflow-title">{step.title}</h3>
+                <p className="workflow-desc">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="section-block" id="services">
-        <p className="section-kicker">Services</p>
-        <h2>Testing programs built around real production needs.</h2>
-        <ServicesPanel services={services} images={galleryImages} />
-      </section>
-
-      <section className="section-block">
-        <p className="section-kicker">How it works</p>
-        <h2>Simple intake, dependable analysis, readable outcomes.</h2>
-        <ol className="workflow-list">
-          {workflow.map((step, index) => (
-            <li key={step}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <p>{step}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <LogoMarquee />
+      {/* ACCREDITATIONS */}
       <AccreditationsFinal />
 
-      <section className="contact-section" id="contact">
-        <div className="contact-office-card">
-          <p className="contact-label">VISIT OUR OFFICE</p>
-          <h2 className="contact-city">Indore</h2>
-          <p className="contact-address">113/1, New Bijalpur, Indore (M.P.) 452012, India</p>
-          <p className="contact-detail">+91 76111 11046</p>
-          <p className="contact-detail">+91 95848 99786</p>
-          <p className="contact-detail">biosynanalytical@gmail.com</p>
-        </div>
-
-        <div className="contact-map-card" aria-label="Biosyn Analytical office map">
-          <iframe
-            title="Biosyn Analytical office location"
-            src="https://www.google.com/maps?q=113%2F1%2C%20New%20Bijalpur%2C%20Indore%20(M.P.)%20452012&output=embed"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+      {/* CONTACT */}
+      <section className="section section--surface" id="contact">
+        <div className="section-container">
+          <span className="section-label">Get in touch</span>
+          <h2 className="section-heading">Visit our laboratory</h2>
+          <div className="contact-wrap">
+            <div className="contact-card">
+              <span className="section-label section-label--light">Office</span>
+              <h3 className="contact-city">Indore</h3>
+              <address className="contact-details">
+                <p className="contact-detail-line">113/1, New Bijalpur, Rajendra Nagar</p>
+                <p className="contact-detail-line">Indore (M.P.) 452012, India</p>
+                <p className="contact-detail-line--white" style={{ marginTop: '1rem' }}>+91 76111 11046</p>
+                <p className="contact-detail-line--white">+91 95848 99786</p>
+                <a className="contact-detail-line--bright" href="mailto:info.biosynanalytical@gmail.com"
+                   style={{ marginTop: '0.5rem', display: 'block' }}>
+                  info.biosynanalytical@gmail.com
+                </a>
+                <a className="contact-detail-line--bright" href="https://www.biosyn.in"
+                   target="_blank" rel="noopener noreferrer">
+                  www.biosyn.in
+                </a>
+              </address>
+              <a className="button button-ghost" href="mailto:info.biosynanalytical@gmail.com"
+                 style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}>
+                Send us a message
+              </a>
+            </div>
+            <div className="contact-map">
+              <iframe
+                title="Biosyn Analytical office location"
+                src="https://www.google.com/maps?q=113%2F1%2C+New+Bijalpur%2C+Rajendra+Nagar%2C+Indore+452012&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
         </div>
       </section>
+
     </main>
   );
 }
