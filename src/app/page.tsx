@@ -49,48 +49,54 @@ export default function Home() {
   return (
     <main className="page-shell">
       <section className="hero">
-        <div className="hero-copy">
-          <div className="brand-lockup">
-            <Image
-              src={logo}
-              alt="Biosyn Analytical logo"
-              className="brand-logo"
-              priority
-            />
-            <div>
-              <span className="brand-name">Biosyn Analytical</span>
-              <p className="brand-tag">Testing solutions for pharma industries</p>
-            </div>
-          </div>
-          <span className="eyebrow">Testing solutions for pharma industries</span>
-          <h1>Trusted testing, presented with clarity and confidence.</h1>
-          <p className="lead">
-            Built for modern pharma and regulated-industry teams, our site
-            presents Biosyn Analytical as a professional testing partner for
-            microbiology, quality assurance, hygiene, and product verification work.
-          </p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#contact">
-              Request a quote
-            </a>
-            <a className="button button-secondary" href="#services">
-              Explore services
-            </a>
-          </div>
+        <div className="hero-figure">
+          <video
+            className="hero-video"
+            src="/videos/lab1 (1).mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
 
-          <dl className="stats-row">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt>{stat.value}</dt>
-                <dd>{stat.label}</dd>
+          <div className="hero-copy overlay">
+            <div className="brand-lockup">
+              <Image
+                src={logo}
+                alt="Biosyn Analytical logo"
+                className="brand-logo"
+                priority
+              />
+              <div>
+                <span className="brand-name">Biosyn Analytical</span>
+                <p className="brand-tag">Testing solutions for pharma industries</p>
               </div>
-            ))}
-          </dl>
+            </div>
+            <span className="eyebrow">Testing solutions for pharma industries</span>
+            <h1>Trusted testing, presented with clarity and confidence.</h1>
+            <p className="lead">
+              Built for modern pharma and regulated-industry teams, our site
+              presents Biosyn Analytical as a professional testing partner for
+              microbiology, quality assurance, hygiene, and product verification work.
+            </p>
+            <div className="hero-actions">
+              <a className="button button-primary" href="#contact">
+                Request a quote
+              </a>
+              <a className="button button-secondary" href="#services">
+                Explore services
+              </a>
+            </div>
 
-          {/* gallery images removed as requested */}
-        </div>
-        <div className="hero-figure" aria-hidden>
-          <Image src={img1} alt="Hero visual" className="hero-figure-img" />
+            <dl className="stats-row">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <dt>{stat.value}</dt>
+                  <dd>{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </section>
 
