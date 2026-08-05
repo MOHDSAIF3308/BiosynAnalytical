@@ -47,8 +47,8 @@ const stats = [
 export default function Home() {
   const galleryImages = [drew, markus, diana, provincial, walter, img1];
   return (
-    <main className="page-shell">
-      <section className="hero">
+    <main>
+      <section className="hero-full">
         <div className="hero-figure">
           <video
             className="hero-video"
@@ -100,12 +100,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Logo marquee inserted directly after header/hero for persistent looping display */}
-      <LogoMarquee />
+      <div className="page-shell">
 
-      {/* temporary marquee removed from this location; final section will appear at the end of the page */}
-
-      <section className="section-block">
+      {/* Logo marquee moved near accreditations to avoid changing accreditation layout */}
         <p className="section-kicker">Who we support</p>
         <p className="section-copy">
           Food manufacturers, beverage brands, kitchens, processors, and
@@ -135,6 +132,7 @@ export default function Home() {
         </ol>
       </section>
 
+      <LogoMarquee />
       <AccreditationsFinal />
 
       <section className="contact-section" id="contact">

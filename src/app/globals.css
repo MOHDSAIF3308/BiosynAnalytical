@@ -131,15 +131,22 @@ textarea {
   justify-content: center;
 }
 
+
+.hero-full {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
 .hero-figure {
   position: relative;
   display: block;
-  height: 56vh;
-  max-height: 760px;
-  border-radius: 12px;
+  height: 100vh;
+  max-height: 100vh;
   overflow: hidden;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
 }
 
 .hero-video {
@@ -158,10 +165,14 @@ textarea {
   padding: 32px;
   color: #ffffff;
   text-shadow: 0 6px 20px rgba(2,6,23,0.6);
-  pointer-events: none; /* keep buttons non-interactive unless explicitly allowed */
 }
 
 .hero-copy.overlay .button { pointer-events: auto; }
+
+/* ensure hero text remains readable on very small screens */
+@media (max-width: 640px) {
+  .hero-copy.overlay { padding: 18px; }
+}
 
 /* On large screens show image as a landscape strip focused on the lower region */
 @media (min-width: 1024px) {
