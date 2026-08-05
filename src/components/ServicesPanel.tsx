@@ -8,6 +8,7 @@ const SERVICE_DATA = [
     id: "microbiology",
     icon: "🧫",
     iconSrc: "/images/icons/microbiology.svg",
+    imageSrc: "/images/microbialtesting.jpg",
     title: "Food Analytical Services",
     short: "Pathogen detection, total plate counts, yeast & mould — full food safety monitoring for production batches.",
     color: "#0D6B5E",
@@ -28,6 +29,7 @@ const SERVICE_DATA = [
     id: "nutrition",
     icon: "📊",
     iconSrc: "/images/icons/nutrition.svg",
+    imageSrc: "/images/nutriton_testing.webp",
     title: "Nutritional Evaluation",
     short: "Composition testing for label declarations: macros, moisture, ash, fibre, vitamins, and minerals.",
     color: "#1A9E8A",
@@ -48,6 +50,7 @@ const SERVICE_DATA = [
     id: "water",
     icon: "💧",
     iconSrc: "/images/icons/water.svg",
+    imageSrc: "/images/watertesting.webp",
     title: "Water & Beverages",
     short: "Drinking water, process water, beverages — chemical and microbiological safety testing.",
     color: "#2ECBAD",
@@ -68,6 +71,7 @@ const SERVICE_DATA = [
     id: "environment",
     icon: "🌿",
     iconSrc: "/images/icons/environment.svg",
+    // no public image provided; SVG will be used
     title: "Environment Management Services",
     short: "Environmental monitoring, air quality, effluent testing, and regulatory compliance for industrial facilities.",
     color: "#0D6B5E",
@@ -88,6 +92,7 @@ const SERVICE_DATA = [
     id: "fertilizer",
     icon: "🌱",
     iconSrc: "/images/icons/fertilizer.svg",
+    imageSrc: "/images/fertilizerandpesticide.jpg",
     title: "Fertilizer & Pesticides",
     short: "Quality testing of fertilizers, agrochemicals, and pesticide residues in food and soil.",
     color: "#1A9E8A",
@@ -108,6 +113,7 @@ const SERVICE_DATA = [
     id: "toys-textile",
     icon: "🧵",
     iconSrc: "/images/icons/toys-textile.svg",
+    imageSrc: "/images/toys&textile.webp",
     title: "Toys & Textile",
     short: "Safety and quality testing for toys and textile products per BIS, EU, and export standards.",
     color: "#2ECBAD",
@@ -128,6 +134,7 @@ const SERVICE_DATA = [
     id: "consultancy",
     icon: "📋",
     iconSrc: "/images/icons/consultancy.svg",
+    imageSrc: "/images/consultuncyandtrunkey.jpg",
     title: "Consultancy & Turnkey Projects",
     short: "End-to-end lab setup, FSSAI licensing, HACCP documentation, and quality system consulting.",
     color: "#0D6B5E",
@@ -148,6 +155,7 @@ const SERVICE_DATA = [
     id: "inspection",
     icon: "🔍",
     iconSrc: "/images/icons/inspection.svg",
+    imageSrc: "/images/inspectionandcertification.jpeg",
     title: "Inspection & Certification",
     short: "Third-party inspection, product certification, and pre-shipment inspection services.",
     color: "#1A9E8A",
@@ -168,6 +176,7 @@ const SERVICE_DATA = [
     id: "nabl",
     icon: "🏅",
     iconSrc: "/images/icons/nabl.svg",
+    // no public image provided; use SVG/icon fallback
     title: "NABL, FSMS 22000, HRA, ZED, SAMAR",
     short: "Accreditation consulting and assessor services for NABL, ISO 22000, and government quality schemes.",
     color: "#2ECBAD",
@@ -218,7 +227,9 @@ export default function ServicesPanel() {
               aria-expanded={isActive}
             >
               <span className="sp-card-icon">
-                {svc.iconSrc ? (
+                {svc.imageSrc ? (
+                  <img src={svc.imageSrc} alt={`${svc.title} image`} className="sp-card-icon-img" />
+                ) : svc.iconSrc ? (
                   <img src={svc.iconSrc} alt={`${svc.title} icon`} className="sp-card-icon-img" />
                 ) : (
                   svc.icon
