@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typedRoutes: true,
-  output: 'export',
+  output: 'standalone',   // ← changed from 'export'
   images: {
-    unoptimized: true
+    unoptimized: true     // optional – keep it if you don't use external image optimization
   }
 };
 
