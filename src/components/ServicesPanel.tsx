@@ -348,8 +348,8 @@ export default function ServicesPanel() {
           line-height: 1;
         }
         .sp-card-icon-img {
-          width: 40px;
-          height: 40px;
+          width: 72px;
+          height: 72px;
           display: block;
           object-fit: contain;
         }
