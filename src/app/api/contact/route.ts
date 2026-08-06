@@ -87,7 +87,8 @@ export async function POST(request: Request) {
   });
 
   if (!emailJsResponse.ok) {
-    console.error('EmailJS request failed:', emailJsResponse.status);
+    const emailJsError = await emailJsResponse.text();
+    console.error(`EmailJS request failed (${emailJsResponse.status}): ${emailJsError}`);
     return Response.json({ error: 'Email service rejected the request.' }, { status: 502 });
   }
 
