@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "biosynanalytical",
+  "main": ".open-next/worker.js",          // ← add this
   "compatibility_date": "2026-08-06",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
