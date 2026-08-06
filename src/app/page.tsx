@@ -1,5 +1,6 @@
 import AccreditationsFinal from '@/components/AccreditationsFinal';
 import ServicesPanel from '@/components/ServicesPanel';
+import ContactForm from '@/components/ContactForm';
 
 // Image in /public/images/Biosynlogo.jpeg
 const LOGO = '/images/Biosynlogo.jpeg';
@@ -46,7 +47,7 @@ export default function Home() {
             <span className="hero-logo-tag">Accredited Testing Laboratory</span>
           </div>
 
-          <p className="hero-eyebrow">Food · Pharma · Environment · Water</p>
+          <p className="hero-eyebrow">Food · Environment · Water</p>
 
           <h1 className="hero-heading">
             Precision testing.<br /><em>Results you can trust.</em>
@@ -135,39 +136,8 @@ export default function Home() {
       <section className="section section--surface" id="contact">
         <div className="section-container">
           <span className="section-label">Get in touch</span>
-          <h2 className="section-heading">Visit our laboratory</h2>
-          <div className="contact-wrap">
-            <div className="contact-card">
-              <span className="section-label section-label--light">Office</span>
-              <h3 className="contact-city">Indore</h3>
-              <address className="contact-details">
-                <p className="contact-detail-line">113/1, New Bijalpur, Rajendra Nagar</p>
-                <p className="contact-detail-line">Indore (M.P.) 452012, India</p>
-                <p className="contact-detail-line--white" style={{ marginTop: '1rem' }}>+91 76111 11046</p>
-                <p className="contact-detail-line--white">+91 95848 99786</p>
-                <a className="contact-detail-line--bright" href="mailto:info.biosynanalytical@gmail.com"
-                   style={{ marginTop: '0.5rem', display: 'block' }}>
-                  info.biosynanalytical@gmail.com
-                </a>
-                <a className="contact-detail-line--bright" href="https://www.biosyn.in"
-                   target="_blank" rel="noopener noreferrer">
-                  www.biosyn.in
-                </a>
-              </address>
-              <a className="button button-ghost" href="mailto:info.biosynanalytical@gmail.com"
-                 style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}>
-                Send us a message
-              </a>
-            </div>
-            <div className="contact-map">
-              <iframe
-                title="Biosyn Analytical office location"
-                src="https://www.google.com/maps?q=113%2F1%2C+New+Bijalpur%2C+Rajendra+Nagar%2C+Indore+452012&output=embed"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
+          <h2 className="section-heading">Request a test or send an enquiry</h2>
+          <ContactForm />
         </div>
       </section>
 
