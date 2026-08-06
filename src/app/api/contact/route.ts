@@ -82,6 +82,7 @@ export async function POST(request: Request) {
         subject,
         message,
         to_name: 'Biosyn Analytical',
+        to_email: 'biosynanalytical@gmail.com',
       },
     }),
   });

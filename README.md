@@ -25,8 +25,11 @@ they are not exposed in browser code. Keep `.env.local` out of Git (it is
 already ignored).
 
 The EmailJS template should provide variables for `from_name`, `from_email`,
-`organization`, `phone`, `subject`, `message`, and `to_name`. A ready-to-paste
-template is available in `docs/emailjs-template.html`.
+`organization`, `phone`, `subject`, `message`, `to_name`, and `to_email`. A
+ready-to-paste template is available in `docs/emailjs-template.html`.
+
+In the EmailJS template settings, set **To Email** to `{{to_email}}` and
+**Reply To** to `{{from_email}}`.
 
 ## Run locally
 
