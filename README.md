@@ -18,10 +18,11 @@ Create a `.env.local` file with these values:
 - `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`
 - `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`
 
-These are browser-side EmailJS identifiers, so Next.js must receive them while
-it builds the app. Cloudflare Worker runtime variables alone do not provide
-them to this client-side form. Keep `.env.local` out of Git (it is already
-ignored), then deploy with `npm run deploy`.
+For local development, place these values in `.env.local`. For production, add
+the same names in Cloudflare Worker **Settings → Variables and secrets**. The
+contact form sends requests to the Worker, which reads those runtime variables;
+they are not exposed in browser code. Keep `.env.local` out of Git (it is
+already ignored).
 
 The EmailJS template should provide variables for `from_name`, `from_email`,
 `organization`, `phone`, `subject`, `message`, and `to_name`. A ready-to-paste
@@ -35,9 +36,9 @@ template is available in `docs/emailjs-template.html`.
 
 ## Deploy
 
-Run `npm run deploy` after adding the EmailJS values to `.env.local`. This
-creates a new Worker deployment with the values compiled into the contact-form
-bundle.
+Run `npm run deploy` after committing the changes. Cloudflare supplies the
+EmailJS values at Worker runtime; `.env.local` is only required to test with
+`npm run dev`.
 
 ## Stack
 

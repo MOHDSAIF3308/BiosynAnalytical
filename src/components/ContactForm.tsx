@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 type FormState = {
   name: string;
@@ -101,31 +100,19 @@ export default function ContactForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const serviceId  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-    const publicKey  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      setStatus('configuration_error');
-      return;
-    }
-
     setStatus('sending');
     try {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: form.name,
-          from_email: form.email,
-          organization: form.organization || 'Not provided',
-          phone: form.phone || 'Not provided',
-          subject: form.subject,
-          message: form.message,
-          to_name: 'Biosyn Analytical',
-        },
-        { publicKey }
-      );
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        setStatus(response.status === 503 ? 'configuration_error' : 'send_error');
+        return;
+      }
+
       setForm(initialState);
       setStatus('success');
     } catch {
@@ -302,7 +289,7 @@ export default function ContactForm() {
 
                 {status === 'configuration_error' && (
                   <p className="cf-status cf-status--error">
-                    Email sending is not configured. Add the EmailJS values to `.env.local`, then restart the dev server.
+                    Email sending is not configured. Add the EmailJS values to Cloudflare or `.env.local`, then restart the dev server.
                   </p>
                 )}
                 {status === 'send_error' && (
