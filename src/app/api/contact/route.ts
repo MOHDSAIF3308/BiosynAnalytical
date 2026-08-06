@@ -22,21 +22,23 @@ function text(value: unknown) {
 }
 
 async function getEmailJsConfig() {
+  const processEnvConfig = {
+    serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+    templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+    publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+  };
+
   try {
     const { env } = await getCloudflareContext({ async: true });
     const bindings = env as CloudflareEnv & EmailJsBindings;
     return {
-      serviceId: bindings.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-      templateId: bindings.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-      publicKey: bindings.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+      serviceId: bindings.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? processEnvConfig.serviceId,
+      templateId: bindings.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? processEnvConfig.templateId,
+      publicKey: bindings.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? processEnvConfig.publicKey,
     };
   } catch {
     // `next dev` does not expose Worker bindings. Use .env.local locally.
-    return {
-      serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-      templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-      publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-    };
+    return processEnvConfig;
   }
 }
 
