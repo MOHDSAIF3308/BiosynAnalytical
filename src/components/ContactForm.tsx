@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 type FormState = {
   name: string;
   email: string;
+  organization: string;
   phone: string;
   subject: string;
   message: string;
@@ -14,10 +15,13 @@ type FormState = {
 const initialState: FormState = {
   name: '',
   email: '',
+  organization: '',
   phone: '',
   subject: '',
   message: ''
 };
+
+type FormStatus = 'idle' | 'sending' | 'success' | 'configuration_error' | 'send_error';
 
 const SUBJECTS = [
   'Microbiological Testing',
@@ -87,7 +91,7 @@ const SERVICES_LIST = [
 
 export default function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<FormStatus>('idle');
 
   function set(field: keyof FormState) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -101,39 +105,32 @@ export default function ContactForm() {
     const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
     const publicKey  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
-    if (serviceId && templateId && publicKey) {
-      setStatus('sending');
-      try {
-        await emailjs.send(
-          serviceId,
-          templateId,
-          {
-            from_name:    form.name,
-            from_email:   form.email,
-            phone:        form.phone,
-            subject:      form.subject,
-            message:      form.message,
-            to_name:      'Biosyn Analytical',
-          },
-          { publicKey }
-        );
-        setForm(initialState);
-        setStatus('success');
-        return;
-      } catch {
-        setStatus('error');
-        return;
-      }
+    if (!serviceId || !templateId || !publicKey) {
+      setStatus('configuration_error');
+      return;
     }
 
-    // Fallback: open mail client
-    const sub  = encodeURIComponent(`Biosyn Enquiry — ${form.subject || 'General'}`);
-    const body = encodeURIComponent(
-      [`Name: ${form.name}`, `Email: ${form.email}`, `Phone: ${form.phone}`,
-       `Subject: ${form.subject}`, '', form.message].join('\n')
-    );
-    window.location.href = `mailto:biosynanalytical@gmail.com?subject=${sub}&body=${body}`;
-    setStatus('success');
+    setStatus('sending');
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          organization: form.organization || 'Not provided',
+          phone: form.phone || 'Not provided',
+          subject: form.subject,
+          message: form.message,
+          to_name: 'Biosyn Analytical',
+        },
+        { publicKey }
+      );
+      setForm(initialState);
+      setStatus('success');
+    } catch {
+      setStatus('send_error');
+    }
   }
 
   return (
@@ -233,6 +230,18 @@ export default function ContactForm() {
                 </div>
 
                 <div className="cf-field">
+                  <label className="cf-label" htmlFor="cf-organization">Organization Name</label>
+                  <input
+                    id="cf-organization"
+                    className="cf-input"
+                    value={form.organization}
+                    onChange={set('organization')}
+                    placeholder="Company or organization"
+                    autoComplete="organization"
+                  />
+                </div>
+
+                <div className="cf-field">
                   <label className="cf-label" htmlFor="cf-phone">Phone Number</label>
                   <input
                     id="cf-phone"
@@ -291,14 +300,19 @@ export default function ContactForm() {
                   )}
                 </button>
 
-                {status === 'error' && (
+                {status === 'configuration_error' && (
                   <p className="cf-status cf-status--error">
-                    Couldn't send via EmailJS. Check your .env keys or the form will fall back to your mail client on retry.
+                    Email sending is not configured. Add the EmailJS values to `.env.local`, then restart the dev server.
+                  </p>
+                )}
+                {status === 'send_error' && (
+                  <p className="cf-status cf-status--error">
+                    EmailJS could not send this enquiry. Check the service, template, public key, and template settings.
                   </p>
                 )}
                 {status === 'idle' && (
                   <p className="cf-status">
-                    We respond within one business day.
+                    Messages are sent through EmailJS and we respond within one business day.
                   </p>
                 )}
               </div>
