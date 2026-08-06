@@ -1,3 +1,4 @@
+// open-next.config.ts
 const config = {
   default: {
     override: {
@@ -9,6 +10,7 @@ const config = {
       queue: "dummy",
     },
   },
+  edgeExternals: ["node:crypto"],   // ← add this line
   middleware: {
     external: true,
     override: {
