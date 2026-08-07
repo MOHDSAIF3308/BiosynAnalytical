@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Manrope, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
-// String path — image must be at /public/images/Biosynlogo.jpeg
 const LOGO = '/images/Biosynlogo.jpeg';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-heading' });
@@ -25,7 +24,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <header className="site-header">
           <div className="page-shell header-inner">
             <a href="/" aria-label="Biosyn Analytical — Home" className="brand-lockup">
-              {/* Plain <img> — no next/image, no webpack, no optimization server needed */}
               <img
                 src={LOGO}
                 alt="Biosyn Analytical logo"
@@ -42,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <nav className="site-nav" aria-label="Main navigation">
               <a className="nav-link" href="/about">About</a>
               <a className="nav-link" href="#services">Services</a>
+              <a className="nav-link" href="/grievance">Grievance</a>
               <a className="button button-primary" href="#contact">Request a quote</a>
             </nav>
           </div>

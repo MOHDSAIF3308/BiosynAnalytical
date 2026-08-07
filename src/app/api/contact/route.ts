@@ -75,6 +75,9 @@ export async function POST(request: Request) {
       template_id: templateId,
       user_id: publicKey,
       template_params: {
+        title: `New enquiry: ${subject}`,
+        name,
+        email,
         from_name: name,
         from_email: email,
         organization,
