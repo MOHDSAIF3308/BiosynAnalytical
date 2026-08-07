@@ -23,7 +23,7 @@ const SERVICE_DATA = [
       { name: "Enterobacteriaceae", method: "ISO 21528", time: "48–72h" },
     ],
     detail: "Our microbiology programme targets key pathogens and spoilage organisms relevant to food safety and shelf-life. We use validated methods aligned to ISO and FSSAI standards. Results include actionable interpretation for manufacturing controls and release decisions, with tailored sampling and reporting formats to fit HACCP and regulatory frameworks.",
-    sampleTypes: ["Raw ingredients", "Finished products", "In-process samples", "Environmental swabs", "Water samples"],
+    sampleTypes: ["Raw ingredients", "Finished products", "In-process samples", "Environmental swabs", "Water samples" , "custom options"],
   },
   {
     id: "nutrition",
@@ -44,7 +44,7 @@ const SERVICE_DATA = [
       { name: "Sodium / Salt", method: "AOAC 935.47", time: "24–48h" },
     ],
     detail: "Full composition panels for macronutrients, vitamins and minerals support accurate labelling and product claims under FSSAI and export regulations. We provide method traceability and uncertainty reporting so label values can be confidently published and defended during inspections or export checks.",
-    sampleTypes: ["Packaged foods", "Snacks & beverages", "Dairy products", "Health supplements", "Export products"],
+    sampleTypes: ["Packaged foods", "Snacks & beverages", "Dairy products", "Health supplements", "Export products" ,  "custom options"],
   },
   {
     id: "water",
@@ -65,7 +65,7 @@ const SERVICE_DATA = [
       { name: "Pesticide Residues", method: "GC-MS/MS", time: "5–7 days" },
     ],
     detail: "Water quality testing for drinking water, process water, and beverages against BIS IS:10500, FSSAI, and export standards. Surface swab and CIP verification testing available for hygiene audits.",
-    sampleTypes: ["Drinking water", "Process/utility water", "Packaged water", "Juices & beverages", "Effluent samples"],
+    sampleTypes: ["Drinking water", "Process/utility water", "Packaged water", "Juices & beverages", "Effluent samples" , "custom options"],
   },
   {
     id: "environment",
@@ -85,7 +85,7 @@ const SERVICE_DATA = [
       { name: "Oil & Grease in Effluent", method: "IS 3025 Pt 39", time: "24h" },
     ],
     detail: "Comprehensive environmental monitoring and compliance testing for industries, municipalities, and ETP operators. Reports are structured for submission to CPCB, SPCB, and regulatory bodies.",
-    sampleTypes: ["Ambient air samples", "Stack gas samples", "Effluent / wastewater", "Soil samples", "Noise measurement"],
+    sampleTypes: ["Ambient air samples", "Stack gas samples", "Effluent / wastewater", "Soil samples", "Noise measurement" , "custom options"],
   },
   {
     id: "fertilizer",
@@ -106,7 +106,7 @@ const SERVICE_DATA = [
       { name: "Active Ingredient Assay", method: "HPLC", time: "3–5 days" },
     ],
     detail: "Testing of fertilizers against FCO specifications and pesticide residue analysis in food commodities per FSSAI MRL limits. Results support regulatory compliance and export documentation.",
-    sampleTypes: ["NPK fertilizers", "Bio-fertilizers", "Pesticide formulations", "Soil samples", "Crop produce"],
+    sampleTypes: ["NPK fertilizers", "Bio-fertilizers", "Pesticide formulations", "Soil samples", "Crop produce" , "custom options"],
   },
   {
     id: "toys-textile",
@@ -127,7 +127,7 @@ const SERVICE_DATA = [
       { name: "Nickel Release (accessories)", method: "EN 1811", time: "5–7 days" },
     ],
     detail: "Safety testing for toys and textile products to meet BIS compulsory certification, EU CE marking requirements, and export documentation. Covers chemical safety, physical safety, and compliance testing.",
-    sampleTypes: ["Plastic toys", "Soft/stuffed toys", "Children's garments", "Woven fabrics", "Fashion accessories"],
+    sampleTypes: ["Plastic toys", "Soft/stuffed toys", "Children's garments", "Woven fabrics", "Fashion accessories" , "custom options"],
   },
   {
     id: "consultancy",
@@ -148,7 +148,7 @@ const SERVICE_DATA = [
       { name: "Training & Capacity Building", method: "On-site", time: "Scheduled" },
     ],
     detail: "Advisory and turnkey services for food businesses, labs, and manufacturers needing end-to-end compliance support. From FSSAI licensing to ISO 22000 implementation and in-house lab establishment.",
-    sampleTypes: ["Food businesses", "Start-up labs", "Manufacturers", "Hotels & cloud kitchens", "Export units"],
+    sampleTypes: ["Food businesses", "Start-up labs", "Manufacturers", "Hotels & cloud kitchens", "Export units" , "custom options"],
   },
   {
     id: "inspection",
@@ -169,7 +169,7 @@ const SERVICE_DATA = [
       { name: "Organic Certification Support", method: "NPOP / NOP", time: "Project-based" },
     ],
     detail: "Independent inspection and certification support for exporters, importers, and manufacturers. Services include third-party audits, pre-shipment inspection, product sampling, and certificate issuance aligned to NABL and ISO 17020 principles.",
-    sampleTypes: ["Export consignments", "Manufacturing facilities", "Food products", "Industrial goods", "Import shipments"],
+    sampleTypes: ["Export consignments", "Manufacturing facilities", "Food products", "Industrial goods", "Import shipments" , "custom options"],
   },
   {
     id: "nabl",
@@ -189,7 +189,7 @@ const SERVICE_DATA = [
       { name: "Annual Surveillance Support", method: "NABL / ISO", time: "Yearly" },
     ],
     detail: "Expert assessor and consulting services for labs and food businesses seeking NABL accreditation (ISO/IEC 17025), FSMS ISO 22000, MSME-ZED certification, and government quality scheme compliance. Led by experienced NABL-trained assessors.",
-    sampleTypes: ["Testing laboratories", "Food manufacturers", "MSMEs", "Pharmaceutical labs", "Government facilities"],
+    sampleTypes: ["Testing laboratories", "Food manufacturers", "MSMEs", "Pharmaceutical labs", "Government facilities" , "custom options"],
   },
 ];
 

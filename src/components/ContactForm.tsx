@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 type FormState = {
   name: string;
@@ -11,16 +12,16 @@ type FormState = {
   message: string;
 };
 
+type FormErrors = Partial<Record<keyof FormState, string>>;
+
 const initialState: FormState = {
   name: '',
   email: '',
   organization: '',
   phone: '',
   subject: '',
-  message: ''
+  message: '',
 };
-
-type FormStatus = 'idle' | 'sending' | 'success' | 'configuration_error' | 'send_error';
 
 const SUBJECTS = [
   'Microbiological Testing',
@@ -43,8 +44,8 @@ const INFO = [
         <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
       </svg>
     ),
-    lines: ['biosynanalytical@gmail.com'],
-    href: 'mailto:biosynanalytical@gmail.com',
+    lines: ['info.biosynanalytical@gmail.com'],
+    href: 'mailto:info.biosynanalytical@gmail.com',
   },
   {
     label: 'Phone',
@@ -88,36 +89,129 @@ const SERVICES_LIST = [
   'Inspection & Certification',
 ];
 
+// ── Validation ──────────────────────────────────────────────────────────────
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validate(form: FormState): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!form.name.trim())
+    errors.name = 'Full name is required.';
+
+  if (!form.email.trim())
+    errors.email = 'Email address is required.';
+  else if (!EMAIL_RE.test(form.email.trim()))
+    errors.email = 'Enter a valid email address.';
+
+  if (!form.subject)
+    errors.subject = 'Please select a service or subject.';
+
+  if (!form.message.trim())
+    errors.message = 'Please describe what you need — we need at least some detail to help you.';
+  else if (form.message.trim().length < 10)
+    errors.message = 'Message is too short. Please add a bit more detail.';
+
+  return errors;
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
+
 export default function ContactForm() {
-  const [form, setForm] = useState<FormState>(initialState);
-  const [status, setStatus] = useState<FormStatus>('idle');
+  const [form, setForm]       = useState<FormState>(initialState);
+  const [errors, setErrors]   = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
+  const [status, setStatus]   = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   function set(field: keyof FormState) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-      setForm(f => ({ ...f, [field]: e.target.value }));
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = e.target.value;
+      setForm(f => {
+        const next = { ...f, [field]: value };
+        // Re-validate the changed field live once it's been touched
+        if (touched[field]) {
+          const nextErrors = validate(next);
+          setErrors(prev => ({ ...prev, [field]: nextErrors[field] }));
+        }
+        return next;
+      });
+    };
+  }
+
+  function blur(field: keyof FormState) {
+    return () => {
+      setTouched(t => ({ ...t, [field]: true }));
+      const fieldErrors = validate(form);
+      setErrors(prev => ({ ...prev, [field]: fieldErrors[field] }));
+    };
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    setStatus('sending');
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
+    // Mark all required fields as touched so errors show
+    setTouched({ name: true, email: true, subject: true, message: true });
 
-      if (!response.ok) {
-        setStatus(response.status === 503 ? 'configuration_error' : 'send_error');
+    const allErrors = validate(form);
+    if (Object.keys(allErrors).length > 0) {
+      setErrors(allErrors);
+      // Scroll to first error
+      const firstKey = Object.keys(allErrors)[0] as keyof FormState;
+      document.getElementById(`cf-${firstKey}`)?.focus();
+      return;
+    }
+
+    const serviceId  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+    const publicKey  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+    if (serviceId && templateId && publicKey) {
+      setStatus('sending');
+      try {
+        await emailjs.send(
+          serviceId,
+          templateId,
+          {
+            from_name:    form.name.trim(),
+            from_email:   form.email.trim(),
+            organization: form.organization.trim() || 'Not provided',
+            phone:        form.phone.trim()        || 'Not provided',
+            subject:      form.subject,
+            message:      form.message.trim(),
+          },
+          { publicKey }
+        );
+        setForm(initialState);
+        setErrors({});
+        setTouched({});
+        setStatus('success');
+        return;
+      } catch {
+        setStatus('error');
         return;
       }
-
-      setForm(initialState);
-      setStatus('success');
-    } catch {
-      setStatus('send_error');
     }
+
+    // Fallback: open mail client
+    const sub  = encodeURIComponent(`Biosyn Enquiry — ${form.subject || 'General'}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${form.name.trim()}`,
+        `Email: ${form.email.trim()}`,
+        `Organisation: ${form.organization.trim() || 'Not provided'}`,
+        `Phone: ${form.phone.trim() || 'Not provided'}`,
+        `Subject: ${form.subject}`,
+        '',
+        form.message.trim(),
+      ].join('\n')
+    );
+    window.location.href = `mailto:biosynanalytical@gmail.com?subject=${sub}&body=${body}`;
+    setStatus('success');
+  }
+
+  // Helper: should we show an error for this field?
+  function err(field: keyof FormState) {
+    return touched[field] ? errors[field] : undefined;
   }
 
   return (
@@ -189,45 +283,71 @@ export default function ContactForm() {
             <form onSubmit={handleSubmit} className="cf-form" noValidate>
               <div className="cf-form-grid">
 
+                {/* Full Name */}
                 <div className="cf-field">
-                  <label className="cf-label" htmlFor="cf-name">Full Name <span className="cf-req">*</span></label>
+                  <label className="cf-label" htmlFor="cf-name">
+                    Full Name <span className="cf-req" aria-hidden="true">*</span>
+                  </label>
                   <input
                     id="cf-name"
-                    className="cf-input"
+                    className={`cf-input${err('name') ? ' cf-input--error' : ''}`}
                     required
+                    aria-required="true"
+                    aria-describedby={err('name') ? 'cf-name-err' : undefined}
+                    aria-invalid={!!err('name')}
                     value={form.name}
                     onChange={set('name')}
+                    onBlur={blur('name')}
                     placeholder="Your name"
                     autoComplete="name"
                   />
+                  {err('name') && (
+                    <p id="cf-name-err" className="cf-field-error" role="alert">
+                      {err('name')}
+                    </p>
+                  )}
                 </div>
 
+                {/* Email */}
                 <div className="cf-field">
-                  <label className="cf-label" htmlFor="cf-email">Email Address <span className="cf-req">*</span></label>
+                  <label className="cf-label" htmlFor="cf-email">
+                    Email Address <span className="cf-req" aria-hidden="true">*</span>
+                  </label>
                   <input
                     id="cf-email"
-                    className="cf-input"
+                    className={`cf-input${err('email') ? ' cf-input--error' : ''}`}
                     type="email"
                     required
+                    aria-required="true"
+                    aria-describedby={err('email') ? 'cf-email-err' : undefined}
+                    aria-invalid={!!err('email')}
                     value={form.email}
                     onChange={set('email')}
+                    onBlur={blur('email')}
                     placeholder="you@company.com"
                     autoComplete="email"
                   />
+                  {err('email') && (
+                    <p id="cf-email-err" className="cf-field-error" role="alert">
+                      {err('email')}
+                    </p>
+                  )}
                 </div>
 
+                {/* Organisation (optional) */}
                 <div className="cf-field">
-                  <label className="cf-label" htmlFor="cf-organization">Organization Name</label>
+                  <label className="cf-label" htmlFor="cf-organization">Organisation</label>
                   <input
                     id="cf-organization"
                     className="cf-input"
                     value={form.organization}
                     onChange={set('organization')}
-                    placeholder="Company or organization"
+                    placeholder="Company or institution (optional)"
                     autoComplete="organization"
                   />
                 </div>
 
+                {/* Phone (optional) */}
                 <div className="cf-field">
                   <label className="cf-label" htmlFor="cf-phone">Phone Number</label>
                   <input
@@ -241,31 +361,55 @@ export default function ContactForm() {
                   />
                 </div>
 
-                <div className="cf-field">
-                  <label className="cf-label" htmlFor="cf-subject">Service / Subject <span className="cf-req">*</span></label>
+                {/* Subject */}
+                <div className="cf-field cf-field--full">
+                  <label className="cf-label" htmlFor="cf-subject">
+                    Service / Subject <span className="cf-req" aria-hidden="true">*</span>
+                  </label>
                   <select
                     id="cf-subject"
-                    className="cf-input cf-select"
+                    className={`cf-input cf-select${err('subject') ? ' cf-input--error' : ''}`}
                     required
+                    aria-required="true"
+                    aria-describedby={err('subject') ? 'cf-subject-err' : undefined}
+                    aria-invalid={!!err('subject')}
                     value={form.subject}
                     onChange={set('subject')}
+                    onBlur={blur('subject')}
                   >
                     <option value="" disabled>Select a service</option>
                     {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
+                  {err('subject') && (
+                    <p id="cf-subject-err" className="cf-field-error" role="alert">
+                      {err('subject')}
+                    </p>
+                  )}
                 </div>
 
+                {/* Message */}
                 <div className="cf-field cf-field--full">
-                  <label className="cf-label" htmlFor="cf-message">Message <span className="cf-req">*</span></label>
+                  <label className="cf-label" htmlFor="cf-message">
+                    Message <span className="cf-req" aria-hidden="true">*</span>
+                  </label>
                   <textarea
                     id="cf-message"
-                    className="cf-input cf-textarea"
+                    className={`cf-input cf-textarea${err('message') ? ' cf-input--error' : ''}`}
                     required
+                    aria-required="true"
+                    aria-describedby={err('message') ? 'cf-message-err' : undefined}
+                    aria-invalid={!!err('message')}
                     rows={5}
                     value={form.message}
                     onChange={set('message')}
+                    onBlur={blur('message')}
                     placeholder="Tell us what you need tested, how many samples, and your timeline."
                   />
+                  {err('message') && (
+                    <p id="cf-message-err" className="cf-field-error" role="alert">
+                      {err('message')}
+                    </p>
+                  )}
                 </div>
 
               </div>
@@ -287,19 +431,14 @@ export default function ContactForm() {
                   )}
                 </button>
 
-                {status === 'configuration_error' && (
-                  <p className="cf-status cf-status--error">
-                    Email sending is not configured. Add the EmailJS values to Cloudflare or `.env.local`, then restart the dev server.
-                  </p>
-                )}
-                {status === 'send_error' && (
-                  <p className="cf-status cf-status--error">
-                    EmailJS could not send this enquiry. Check the service, template, public key, and template settings.
+                {status === 'error' && (
+                  <p className="cf-status cf-status--error" role="alert">
+                    Something went wrong sending your message. Please try again or email us directly.
                   </p>
                 )}
                 {status === 'idle' && (
                   <p className="cf-status">
-                    Messages are sent through EmailJS and we respond within one business day.
+                    We respond within one business day.
                   </p>
                 )}
               </div>
@@ -446,7 +585,7 @@ export default function ContactForm() {
           grid-template-columns: 1fr 1fr;
           gap: 1.25rem 1.5rem;
         }
-        .cf-field { display: flex; flex-direction: column; gap: 7px; }
+        .cf-field { display: flex; flex-direction: column; gap: 6px; }
         .cf-field--full { grid-column: 1 / -1; }
 
         .cf-label {
@@ -477,6 +616,32 @@ export default function ContactForm() {
           box-shadow: 0 0 0 3px rgba(26,158,138,0.14);
         }
         .cf-input::placeholder { color: var(--subtle); }
+
+        /* Error state for inputs */
+        .cf-input--error {
+          border-color: #c0392b;
+          background: #fff5f5;
+        }
+        .cf-input--error:focus {
+          border-color: #c0392b;
+          box-shadow: 0 0 0 3px rgba(192,57,43,0.13);
+        }
+
+        /* Per-field error message */
+        .cf-field-error {
+          font-size: 0.78rem;
+          color: #c0392b;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          line-height: 1.4;
+        }
+        .cf-field-error::before {
+          content: '⚠';
+          font-size: 0.72rem;
+          flex-shrink: 0;
+        }
 
         .cf-select {
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A6B62' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
